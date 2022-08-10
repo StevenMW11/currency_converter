@@ -1,0 +1,7 @@
+requests
+plotly.express
+pandas
+datetime
+python-dotenv
+pandas_datareader
+openpyxl

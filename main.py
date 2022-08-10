@@ -13,9 +13,10 @@ import plotly.express as px
 import pandas as pd
 import pandas_datareader.data as web
 from datetime import date
+from dotenv import load_dotenv
 
-api_key = 'zfzFLkorymExtxaTPo6F' #CREATE THIS ENV VARIABLE FOR USER INPUT
-
+load_dotenv()
+api_key = str((os.getenv('API_KEY')))
 usd_codes = pd.read_excel("conversion_codes_usd.xlsx")
 eur_codes = pd.read_excel("conversion_codes_eur.xlsx")
 usd_codes_dict = usd_codes.to_dict()
@@ -103,6 +104,7 @@ def main():
             if start_currency != end_currency:
                 print(f"You Want To Convert {start_currency} to {end_currency}")
                 amount_to_convert = float(input("How Much Do You Want To Convert? "))
+                print("Fetching Data...")
                 conversion_df_creation(start_currency, end_currency)
                 exchange_rates_df = conversion_df_creation(start_currency,end_currency)
                 latest_exchange_rate = float(exchange_rates_df["Value"][0])
@@ -110,7 +112,6 @@ def main():
                 amount_to_convert_clean = f"{amount_to_convert:,.2f}"
                 latest_exchange_rate_clean = f"{latest_exchange_rate:,.2f}"
                 conversion_amount_clean = f"{conversion_amount:,.2f}"
-                print("Fetching Data...")
                 print("")
                 print (f"{amount_to_convert_clean} {start_currency} is equal to {conversion_amount_clean} {end_currency} at the conversion rate of {latest_exchange_rate_clean}")
                 print("Stay Tuned For Your Dashboard (Historical Exchange Rates)")
