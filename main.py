@@ -24,11 +24,17 @@ eur_codes_dict = eur_codes.to_dict()
 valid_currencies_usd = list(usd_codes_dict['Currency_Code'].values())
 valid_currencies_eur = list(eur_codes_dict['Currency_Code'].values())
 
-def currency_check(code):
-    if (code in valid_currencies_usd) or (code in valid_currencies_eur):
-        return True
+def currency_check(start_currency, end_currency):
+    if start_currency == "USD":
+        if end_currency in valid_currencies_usd:
+            return True
+        else:
+            return False
     else:
-        return False
+        if end_currency in valid_currencies_eur:
+            return True
+        else:
+            return False
 
 # ACCESS THE DATA FROM NASDAQ & SAVE TO PANDAS DATA FRAME
 def conversion_df_creation(start_currency, end_currency):
@@ -83,6 +89,9 @@ def dashboard(dataframe, start_currency, end_currency):
     return viz
 
 def main():
+    print("")
+    print("Welcome to Your Currency Converter & Dashboard")
+    print("")
     # DETERMINE YOUR CURRENCIES TO CONVERT (USER INPUT)
     start_currency = input("Which Currency Would You Like To Convert? (USD or EUR) ").upper()
 
@@ -90,7 +99,7 @@ def main():
     if (start_currency == "USD") or (start_currency == "EUR"):
         end_currency = input("Please Input Your Desired Currency To Convert (AUD, CAD, CNY ...): ").upper()
         # VALIDATE THE ENDING CURRENCY USING OUR CURRENCY CHECK FUNCTION
-        if currency_check(end_currency): 
+        if currency_check(start_currency,end_currency): 
             if start_currency != end_currency:
                 print(f"You Want To Convert {start_currency} to {end_currency}")
                 amount_to_convert = float(input("How Much Do You Want To Convert? "))
@@ -101,15 +110,18 @@ def main():
                 amount_to_convert_clean = f"{amount_to_convert:,.2f}"
                 latest_exchange_rate_clean = f"{latest_exchange_rate:,.2f}"
                 conversion_amount_clean = f"{conversion_amount:,.2f}"
+                print("Fetching Data...")
+                print("")
                 print (f"{amount_to_convert_clean} {start_currency} is equal to {conversion_amount_clean} {end_currency} at the conversion rate of {latest_exchange_rate_clean}")
+                print("Stay Tuned For Your Dashboard (Historical Exchange Rates)")
                 viz = dashboard(exchange_rates_df,start_currency,end_currency)
                 viz.show()
             else:
                print(f"You Can't Convert {start_currency} to itself, Please Run Again.") 
         else:
-            print(f"{end_currency} Is Not A Valid Currency, Please Run Again.")
+            print(f"{end_currency} Is Not A Valid Currency To Convert To With {start_currency}, Please Run Again.")
     else:
-        print (f"{start_currency} Is Not A Valid Currency, Please Run Again.")
+        print (f"{start_currency} Is Not A Valid Currency To Convert, Please Run Again.")
 
 if __name__ == "__main__":
     main()
