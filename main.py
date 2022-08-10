@@ -49,7 +49,37 @@ def conversion_df_creation(start_currency, end_currency):
 def dashboard(dataframe, start_currency, end_currency):
     viz = px.line(data_frame=dataframe,x="Date",y="Value",title=f"Daily Exchange Rate ({start_currency} to {end_currency})",labels={"Date":"Date","Value":"Exchange Rate"})
     viz = viz.update_yaxes(nticks=10)
-    viz = viz.update_layout(yaxis_tickprefix = '$', yaxis_tickformat = ',.')
+    viz = viz.update_layout(yaxis_tickformat = ',.')
+    viz = viz.update_layout(
+    # https://stackoverflow.com/questions/61782622/plotly-how-to-add-a-horizontal-scrollbar-to-a-plotly-express-figure
+    xaxis=dict(
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1,
+                     label="1m",
+                     step="month",
+                     stepmode="backward"),
+                dict(count=6,
+                     label="6m",
+                     step="month",
+                     stepmode="backward"),
+                dict(count=1,
+                     label="YTD",
+                     step="year",
+                     stepmode="todate"),
+                dict(count=1,
+                     label="1y",
+                     step="year",
+                     stepmode="backward"),
+                dict(step="all")
+            ])
+        ),
+        rangeslider=dict(
+            visible=True
+        ),
+        type="date"
+    )
+    )
     return viz
 
 def main():
@@ -72,8 +102,8 @@ def main():
                 latest_exchange_rate_clean = f"{latest_exchange_rate:,.2f}"
                 conversion_amount_clean = f"{conversion_amount:,.2f}"
                 print (f"{amount_to_convert_clean} {start_currency} is equal to {conversion_amount_clean} {end_currency} at the conversion rate of {latest_exchange_rate_clean}")
-                #viz = dashboard(exchange_rates_df,start_currency,end_currency)
-                #viz.show()
+                viz = dashboard(exchange_rates_df,start_currency,end_currency)
+                viz.show()
             else:
                print(f"You Can't Convert {start_currency} to itself, Please Run Again.") 
         else:
