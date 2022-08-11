@@ -6,4 +6,4 @@ python-dotenv
 pandas_datareader
 openpyxl
 kaleido
-dotenv
+python-dotenv

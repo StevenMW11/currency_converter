@@ -13,7 +13,7 @@ import plotly.express as px
 import pandas as pd
 import pandas_datareader.data as web
 from datetime import date
-from dotenv import load_dotenv
+import dotenv import load_dotenv
 
 load_dotenv()
 api_key = str((os.getenv('API_KEY')))
